@@ -82,8 +82,12 @@ class AuthController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
-                $token = $data['data']['token'];
-                session(['token' => $token]);
+                $user_details = $data['data']['user_details']['user'];
+                $token = $data['data']['user_details']['token'];
+                session()->put('authenticated', true);
+                session()->put('token', $token);
+                session()->put('user', $user_details);
+
                 return redirect()->route('home')->with('success', 'Login successful!');
             }
             $responseData = $response->json();
@@ -98,12 +102,49 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try {
-            session()->forget('token');
+            $token = session('token');
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+
+            if ($token) {
+                $response = Http::withToken($token)->post($this->base_url . 'logout');
+
+                if ($response->successful()) {
+                    session()->forget('token');
+                    session()->forget('user');
+                    session()->put('authenticated', false);
+                } else {
+                    return back()->with('error', 'Failed to log out from the API.');
+                }
+            }
+
             return redirect()->route('login')->with('success', 'Logout successful');
         } catch (\Exception $e) {
             return back()->with('error', 'An error occurred during logout. Please try again later.');
+        }
+    }
+
+
+    public function user()
+    {
+        try {
+            $token = session('token');
+
+            if (!$token) {
+                return redirect()->route('login')->with('error', 'Please login first.');
+            }
+
+            $response = Http::withToken($token)->get($this->base_url . 'getuser');
+
+            if ($response->successful()) {
+                $data = $response->json();
+                // Save user data in session
+                session(['user' => $data]);
+            }
+
+            return redirect()->route('login')->with('error', 'Failed to fetch user details. Please try again.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred while fetching user details. Please try again later.');
         }
     }
 }

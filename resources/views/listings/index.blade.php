@@ -31,14 +31,14 @@
                         <div class="col-md-4">
                             <label class="fw-bold text-muted">User Name</label>
                             <input type="text" class="form-control form-control-sm text-center border-0 bg-light"
-                                value="{{ Auth::user()->name ?? 'N/A' }}" disabled>
+                                value="{{ $user->name }}" disabled>
                         </div>
 
                         <!-- User Email -->
                         <div class="col-md-4">
                             <label class="fw-bold text-muted">User Email</label>
                             <input type="email" class="form-control form-control-sm text-center border-0 bg-light"
-                                value="{{ Auth::user()->email ?? 'N/A' }}" disabled>
+                                value="{{ $user->email }}" disabled>
                         </div>
                     </div>
 

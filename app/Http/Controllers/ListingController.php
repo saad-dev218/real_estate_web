@@ -11,7 +11,8 @@ class ListingController extends Controller
      */
     public function index()
     {
-        return view('listings.index');
+        $user = getUser();
+        return view('listings.index', compact('user'));
     }
 
     /**

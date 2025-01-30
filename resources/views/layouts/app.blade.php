@@ -48,8 +48,8 @@
                             Home
                         </a>
                     </li>
-
-
+                    @if (session('authenticated') == true)
+                        <!-- Show Dashboard and Logout if authenticated -->
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                                 href="{{ route('listings.index') }}">
@@ -57,21 +57,14 @@
                             </a>
                         </li>
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                {{ Auth::user()->name ?? 'User' }}
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li>
-                                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item text-danger">Logout</button>
-                                    </form>
-                                </li>
-                            </ul>
+                        <li class="nav-item">
+                            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                                @csrf
+                                <button type="submit" class="nav-link btn btn-danger">Logout</button>
+                            </form>
                         </li>
-
+                    @else
+                        <!-- Show Login and Register if not authenticated -->
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}"
                                 href="{{ route('login') }}">
@@ -84,7 +77,7 @@
                                 Register
                             </a>
                         </li>
-
+                    @endif
                 </ul>
             </div>
         </div>

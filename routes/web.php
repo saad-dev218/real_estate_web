@@ -12,5 +12,9 @@ Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('register', [AuthCOntroller::class, 'registeration'])->name('registeration');
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'log_in'])->name('log_in');
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-Route::resource('listings', ListingController::class);
+
+Route::middleware('custom_authenticate')->group(function () {
+    Route::get('user', [AuthController::class, 'user'])->name('user');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::resource('listings', ListingController::class);
+});
