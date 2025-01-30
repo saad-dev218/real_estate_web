@@ -49,7 +49,7 @@
                         </a>
                     </li>
 
-                    @auth
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                                 href="{{ route('listings.index') }}">
@@ -59,7 +59,7 @@
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                {{ Auth::user()->name }}
+                                {{ Auth::user()->name ?? 'User' }}
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -71,7 +71,7 @@
                                 </li>
                             </ul>
                         </li>
-                    @else
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}"
                                 href="{{ route('login') }}">
@@ -84,7 +84,7 @@
                                 Register
                             </a>
                         </li>
-                    @endauth
+
                 </ul>
             </div>
         </div>

@@ -61,32 +61,49 @@ class AuthController extends Controller
 
     public function log_in(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
-            // 'remember' => 'nullable|boolean',
+            'password' => 'required|min:8',
+            'remember' => 'nullable',
         ]);
 
         if ($validator->fails()) {
             return redirect()->route('login')->withErrors($validator)->withInput();
         }
 
-        $response = Http::post($this->base_url . 'login', [
-            'email' => $request->email,
-            'password' => $request->password,
-        ]);
+        try {
+            $remember = $request->has('remember') && $request->remember == 'on';
 
-        if ($response->successful()) {
-            $data = $response->json();
-            session(['token' => $data['token']]);
+            $response = Http::post($this->base_url . 'login', [
+                'email' => $request->email,
+                'password' => $request->password,
+                'remember' => $remember,
+            ]);
 
-            return redirect()->route('home')->with('success', 'Login successful!');
+            if ($response->successful()) {
+                $data = $response->json();
+                $token = $data['data']['token'];
+                session(['token' => $token]);
+                return redirect()->route('home')->with('success', 'Login successful!');
+            }
+            $responseData = $response->json();
+            return back()->with('error', $responseData['message'] ?? 'Invalid credentials. Please try again.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred while logging in. Please try again later.');
         }
-
-        $responseData = $response->json();
-        return back()->with('error', $responseData['message'] ?? 'Invalid credentials. Please try again.');
     }
 
-    public function logout() {}
+
+
+    public function logout(Request $request)
+    {
+        try {
+            session()->forget('token');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->route('login')->with('success', 'Logout successful');
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred during logout. Please try again later.');
+        }
+    }
 }
