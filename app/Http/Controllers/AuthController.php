@@ -89,8 +89,4 @@ class AuthController extends Controller
     }
 
     public function logout() {}
-    public function dashboard()
-    {
-        return view('dashboard');
-    }
 }

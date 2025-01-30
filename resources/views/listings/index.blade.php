@@ -61,7 +61,7 @@
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center ">
                     <h5>Your Listings</h5>
-                    <a href="" class="btn btn-success">+ Create Listing</a>
+                    <a href="{{ route('listings.create') }}" class="btn btn-success">+ Create Listing</a>
                 </div>
             </div>
             <div class="card-body">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ListingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,4 +13,4 @@ Route::post('register', [AuthCOntroller::class, 'registeration'])->name('registe
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'log_in'])->name('log_in');
 
-Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+Route::resource('listings', ListingController::class);
