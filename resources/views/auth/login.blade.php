@@ -7,7 +7,7 @@
 
             @include('components.messages')
 
-            <form action="{{ route('login') }}" method="POST">
+            <form action="{{ route('log_in') }}" method="POST">
                 @csrf
 
                 <div class="mb-3">
