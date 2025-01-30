@@ -5,13 +5,10 @@
         <div class="card p-4 shadow-lg" style="width: 450px;">
             <h3 class="text-center mb-3">Register Now</h3>
 
-            @if (session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+            @include('components.messages')
 
-            <form action="{{ route('register') }}" method="POST">
+            <form action="{{ route('registeration') }}" method="POST">
                 @csrf
-
                 <div class="mb-3">
                     <label for="name" class="form-label">Full Name</label>
                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
@@ -20,7 +17,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
@@ -29,7 +25,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
